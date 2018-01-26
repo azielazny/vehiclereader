@@ -37,11 +37,29 @@ public class ImageBarcodeReader {
 
     public void readAztecCodeFromFile(String filePath) throws IOException {
         this.aztecFile = ImageIO.read(new FileInputStream(filePath));
-
     }
 
     public void readAztecCodeFromUri(String uriFile) throws IOException {
         this.aztecFile = ImageIO.read(new URL(uriFile));
+    }
+
+    public String readAztecCode()
+            throws IOException, NotFoundException {
+
+        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(
+                DecodeHintType.class);
+        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.FALSE);
+        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+//        tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
+
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(getAztecFile())));
+        Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap, tmpHintsMap);
+        return qrCodeResult.getText();
+
+    }
+
+    public void setAztecFile(BufferedImage aztecFile) {
+        this.aztecFile = aztecFile;
     }
 
     public String getCharset() {
@@ -64,18 +82,4 @@ public class ImageBarcodeReader {
         return aztecFile;
     }
 
-    public String readAztecCode()
-            throws IOException, NotFoundException {
-
-        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(
-                DecodeHintType.class);
-        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.FALSE);
-        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
-        tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-
-        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(getAztecFile())));
-        Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap, tmpHintsMap);
-        return qrCodeResult.getText();
-
-    }
 }
