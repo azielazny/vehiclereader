@@ -15,6 +15,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class ImageBarcodeReader {
 
     private BufferedImage aztecFile;
@@ -81,5 +82,14 @@ public class ImageBarcodeReader {
     public BufferedImage getAztecFile() {
         return aztecFile;
     }
+
+
+    /* zXing stuff */
+
+    private RGBLuminanceSource zxRGBSource;
+    private Reader zxReader;
+    private Result zxResult;
+    private BinaryBitmap zxBinBmp;
+
 
 }
