@@ -23,16 +23,16 @@ public class ImageBarcodeReader {
 
     public static void main(String[] args) throws IOException, NotFoundException {
         String filePath = "Y5Vt7.png";
-        String uriFile = "https://i.stack.imgur.com/Y5Vt7.png";
+//        String uriFile = "https://i.stack.imgur.com/Y5Vt7.png";
 
         ImageBarcodeReader imageBarcodeReader = new ImageBarcodeReader();
         imageBarcodeReader.readAztecCodeFromFile(filePath);
         System.out.println("Data read from Aztec by filepath: "
                 + imageBarcodeReader.readAztecCode());
 
-        imageBarcodeReader.readAztecCodeFromUri(uriFile);
-        System.out.println("Data read from Aztec by uri: "
-                + imageBarcodeReader.readAztecCode());
+//        imageBarcodeReader.readAztecCodeFromUri(uriFile);
+//        System.out.println("Data read from Aztec by uri: "
+//                + imageBarcodeReader.readAztecCode());
     }
 
     public void readAztecCodeFromFile(String filePath) throws IOException {

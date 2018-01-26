@@ -1,0 +1,63 @@
+package com.vehiclereader.registrationInfoDecoder;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+
+@XmlRootElement
+public class RegistrationInfo implements Serializable{
+    public String SeriaDr;
+    public String OrganWydajacyNazwa;
+    public String OrganWydajacyUlica;
+    public String OrganWydajacyMiasto;
+    public String NrRejestracyjny;
+    public String MarkaPojazdu;
+    public String TypPojazdu;
+    public String WariantPojazdu;
+    public String WersjaPojazdu;
+    public String ModelPojazdu;
+    public String VinNrNadwozia;
+    public String DataWydaniaAktualnegoDr;
+    public String NazwaPosiadaczaDr;
+    public String ImionaPosiadaczaDr;
+    public String NazwiskoPosiadaczaDr;
+    public String PeselRegonPosiadaczaDr;
+    public String KodPocztowyPosiadaczaDr;
+    public String MiastoPosiadaczaDr;
+    public String PowiatPosiadaczaDr;
+    public String UlicaPosiadaczaDr;
+    public String NrDomuPosiadaczaDr;
+    public String NrLokaluPosiadaczaDr;
+    public String NazwaWlascicielaPojazdu;
+    public String ImionaWlascicielaPojazdu;
+    public String NazwiskoWlascicielaPojazdu;
+    public String PeselRegonWlascicielaPojazdu;
+    public String KodPocztowyWlascicielaPojazdu;
+    public String MiastoWlascicielaPojazdu;
+    public String PowiatWlascicielaPojazdu;
+    public String UlicaWlascicielaPojazdu;
+    public String NrDomuWlascicielaPojazdu;
+    public String NrLokaluWlascicielaPojazdu;
+    public String MaksymalnaMasaCalkowita;
+    public String DopuszczalnaMasaCalkowitaPojazdu;
+    public String DopuszczalnaMasaCalkowitaZespoluPojazdow;
+    public String MasaWlasna;
+    public String KategoriaPojazdu;
+    public String NrSwiadectwaHomologacjiTypuPojazdu;
+    public String LiczbaOsi;
+    public String MaksymalnaMasaCalkowitaPrzyczepyZHamulcem;
+    public String MaksymalnaMasaCalkowitaPrzyczepyBezHamulca;
+//    public String StosunekMocyDoCiezaru;
+//    public String Pojemnosc;
+//    public String MocSilnika;
+//    public String RodzajPaliwa;
+//    public String DataPierwszejRejestracji;
+//    public String MiejscaSiedzace;
+//    public String MiejscaStojace;
+//    public String RodzajPojazdu;
+//    public String Przeznaczenie;
+//    public String RokProdukcji;
+//    public String DopuszczalnaLadownosc;
+//    public String NajwiekszyDopuszczalnyNaciskOsi;
+//    public String NrKartyPojazdu;
+//    public String KodITS;
+}
