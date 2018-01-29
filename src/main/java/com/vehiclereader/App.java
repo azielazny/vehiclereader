@@ -10,17 +10,19 @@ import java.io.IOException;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args ) throws IOException, NotFoundException {
+public class App {
+    public static void main(String[] args) throws IOException, NotFoundException {
+        new App().start();
+    }
+
+    private void start() throws IOException, NotFoundException {
         String filePath = "Y5Vt7.png";
 //        String uriFile = "https://i.stack.imgur.com/Y5Vt7.png";
 
         ImageBarcodeReader imageBarcodeReader = new ImageBarcodeReader();
         imageBarcodeReader.readAztecCodeFromFile(filePath);
-        String readImage=imageBarcodeReader.readAztecCode();
+        String readImage = imageBarcodeReader.readAztecCode();
         System.out.println("Data read from Aztec by filepath: ");
         System.out.println(readImage);
 
@@ -36,9 +38,8 @@ public class App
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             m.marshal(info, System.out);
 
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Error: Can't decode text, ensure that it is correctly scanned.");
         }
-
     }
 }
