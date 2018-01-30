@@ -6,7 +6,7 @@ TODO List:
 - Poprawić odczyt z kamery. Nie dekoduje słabej jakości zdjęć
 
 - UWAGA! W ostatecznej wersji należy zmodyfikować ścieżki dostępu i zapisu plików graficznych. Testowane było z grafiką w głównym katalogu.
-- W kliencie brakuje implementacji odczytu wersji binarnej zdjęcia z metody decodeImageFromWebForm. Jest tylko odczyt z pliku.
+
 
 Funkcjonalności:
 - Branch Test używa bibliotek OpenCV i manipuluje zdjęciem po odczycie z kamery. Nie ma specjalnej poprawy w odczycie.
@@ -16,4 +16,4 @@ Funkcjonalności:
 - Servlet ma zaimplementowane: skanowanie dowodu rej. z kamery, skanowanie z załadowanego zdjęcia, odczyt z wklejonego zaszyfrowanego kodu ze skanera.
 
 - Wersja webowa odczytuje kody i stara się wyświetlić sformatowane dane. Jest jednak możliwość odczytu różnego typu kodów QR, EAN, Aztec itp. Nie jest to włączone w API, ale działa offline.
-
+- Podobnie jest z odczytem z pliku. Jest zaimplementowene, ale nie włączone na serwlecie dla klienta.

@@ -66,8 +66,13 @@ public class ClientSimulation {
     }
 
     public JSONObject decodeImageFromWebForm(byte[] ImageFile, String ImageFilePath) {
+        Map<String, String> Params = new HashMap<>();
         byteImage = ImageFile;
-        return this.decodeImageFromFile(ImageFilePath);
+
+        Params.put("command", "decodeFromImage");
+        Params.put("imageByte", ImageFilePath);
+
+        return this.postRequest(Params);
     }
 
     private JSONObject postRequest(Map<String, String> ParamsArray) {
@@ -90,6 +95,11 @@ public class ClientSimulation {
                 File imageFile = new File(ParamsArray.get("image"));
                 builder.addBinaryBody("image", imageFile, ContentType.APPLICATION_OCTET_STREAM, imageFile.getName());
                 ParamsArray.remove("image");
+            }
+            if (ParamsArray.containsKey("imageByte")) {
+                builder.addBinaryBody("image", byteImage, ContentType.APPLICATION_OCTET_STREAM, ParamsArray.get("imageByte"));
+                ParamsArray.remove("image");
+                byteImage=null;
             }
 
 
