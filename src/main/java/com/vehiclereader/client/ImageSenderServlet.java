@@ -36,6 +36,7 @@ public class ImageSenderServlet extends HttpServlet {
             InputStream fileContent = filePart.getInputStream();
             byte[] bytes = readFully(fileContent);
             result = new ClientSimulation("klucz123").decodeImageFromWebForm(bytes, fileName).toString();
+
         }
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
