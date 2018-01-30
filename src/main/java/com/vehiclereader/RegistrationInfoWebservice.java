@@ -23,53 +23,72 @@ import java.util.Collections;
 @ApplicationScoped
 public class RegistrationInfoWebservice {
 
+    final private String ApiKey = "klucz123";
+
     @Inject
     RegistrationInfo registrationInfo;
 
     @Inject
     ImageBarcodeReader imageBarcodeReader;
 
+    public String getApiKey() {
+        return ApiKey;
+    }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public Response decodeRegistrationInfoFromImage(@FormDataParam("image") InputStream fileInputStream,
-                                  @FormDataParam("image") FormDataContentDisposition fileMetaData,
-                                  @FormDataParam("key") String key) throws Exception {
-        RegistrationInfo info;
+    public Response decodeRegistrationInfo(@FormDataParam("image") InputStream fileInputStream,
+                                           @FormDataParam("image") FormDataContentDisposition fileMetaData,
+                                           @FormDataParam("key") String key,
+                                           @FormDataParam("command") String command,
+                                           @FormDataParam("text") String text) throws Exception {
+
         ObjectMapper mapper = new ObjectMapper();
+
+        if (!key.equals(getApiKey()))
+            return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error1", "Błędna identyfikacja Klienta"))).build();
+        RegistrationInfo info;
         try {
-            BufferedImage bufferedImage = ImageIO.read(fileInputStream);
-            imageBarcodeReader.setAztecFile(bufferedImage);
-            String readImage = imageBarcodeReader.readAztecCode();
-
-            info = AztecDecoder.Decode(readImage);
+            if (command.equals("decodeFromImage")) {
+                info = decodeRegistrationInfoFromImage(fileInputStream);
+                return Response.ok(mapper.writeValueAsString(info)).build();
+            }
+            if (command.equals("decodeFromText")) {
+                info = decodeRegistrationInfoFromText(text);
+                return Response.ok(mapper.writeValueAsString(info)).build();
+            }
         } catch (IllegalArgumentException ex) {
-            return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error", "Brak pliku"))).build();
+            return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error4", "Brak pliku"))).build();
         } catch (AztecDecodingException ex) {
-            return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error", "Nie znaleźliśmy kodu"))).build();
+            return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error5", "Nie rozpoznaliśmy kodu"))).build();
+        } catch (Exception ex) {
+            return null;
         }
-        return Response.ok(mapper.writeValueAsString(info)).build();
+        return Response.ok(mapper.writeValueAsString(Collections.singletonMap("Error3", "Nierozpoznana komanda"))).build();
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getRegistrationInfo() {
-        return Response.ok("ddddd").build();
+    private RegistrationInfo decodeRegistrationInfoFromImage(InputStream fileInputStream) throws Exception {
+
+        BufferedImage bufferedImage = ImageIO.read(fileInputStream);
+        imageBarcodeReader.setAztecFile(bufferedImage);
+        String readImage = imageBarcodeReader.readAztecCode();
+
+        return decodeRegistrationInfoFromText(readImage);
     }
+
+    private RegistrationInfo decodeRegistrationInfoFromText(String textToDecode) throws Exception {
+        return AztecDecoder.Decode(textToDecode);
+    }
+
 
     @GET
     @Path("{fileId}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getRegistrationInfo(@PathParam("fileId") String fileId) throws IOException, NotFoundException, com.google.zxing.NotFoundException {
         String readImage = barcodeReader(fileId);
-
         barcodeDecoder(readImage);
-//        Response result = Response.
-//                status(200).
-//                entity(info).
-//                type("application/json").
-//                build();
+
         ObjectMapper mapper = new ObjectMapper();
         return Response.ok(mapper.writeValueAsString(registrationInfo)).build();
     }

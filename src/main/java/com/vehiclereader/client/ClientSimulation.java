@@ -31,7 +31,7 @@ public class ClientSimulation {
     public JSONObject decodeText(String Text) {
         Map<String, String> Params = new HashMap<>();
 
-        Params.put("command", "decode-text");
+        Params.put("command", "decodeFromText");
         Params.put("text", Text);
 
         return this.postRequest(Params);
@@ -59,19 +59,15 @@ public class ClientSimulation {
     public JSONObject decodeImageFromFile(String ImageFilePath) {
         Map<String, String> Params = new HashMap<>();
 
-        Params.put("command", "decode-image");
+        Params.put("command", "decodeFromImage");
         Params.put("image", ImageFilePath);
 
         return this.postRequest(Params);
     }
 
-    public JSONObject decodeImageFromWebForm(byte[] ImageFile, String ImageName) {
-        Map<String, String> Params = new HashMap<>();
+    public JSONObject decodeImageFromWebForm(byte[] ImageFile, String ImageFilePath) {
         byteImage = ImageFile;
-        Params.put("command", "decode-image");
-        Params.put("image", ImageName);
-
-        return this.postRequest(Params);
+        return this.decodeImageFromFile(ImageFilePath);
     }
 
     private JSONObject postRequest(Map<String, String> ParamsArray) {

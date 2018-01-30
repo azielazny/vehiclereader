@@ -36,18 +36,20 @@ public class WebInterfaceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Part filePart = null;
-        String fileName = null;
-        String result = "z";
-        if (req.getParameter("fromFile") != null) {
-            filePart = req.getPart("fileFromDisc");
+        String decodedAztecText = "";
+        String fileName = "";
+        String result="";
+        if (req.getParameter("fromFile") != null) {//file
+            Part filePart = req.getPart("fileFromDisc");
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             InputStream fileContent = filePart.getInputStream();
             byte[] bytes = readFully(fileContent);
             result = new ClientSimulation("klucz123").decodeImageFromWebForm(bytes, fileName).toString();
 
-        } else {
-
+        } else if(req.getParameter("fromTextarea") != null) {//textarea
+            decodedAztecText=req.getParameter("base64ToDecode");
+            result = new ClientSimulation("klucz123").decodeText(decodedAztecText).toString();
+        } else {//camera
             String data = "";
             try {
                 StringBuffer buffer = new StringBuffer();
@@ -75,8 +77,9 @@ public class WebInterfaceServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        req.setAttribute("zaladowanyplik2", fileName);
-        req.setAttribute("wynik", result);
+        req.setAttribute("uploadedFile", fileName);
+        req.setAttribute("uploadedText", decodedAztecText);
+        req.setAttribute("result", result);
         RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
         dispatcher.forward(req, resp);
     }
@@ -84,31 +87,8 @@ public class WebInterfaceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
-        req.setAttribute("typeList", "xxx");
-        req.setAttribute("x1", "x");
-
         RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
         dispatcher.forward(req, resp);
-
-//        response.setContentType("text/html");
-//        response.setCharacterEncoding("UTF-8");
-//
-//        try (PrintWriter writer = response.getWriter()) {
-//
-//            writer.println("<!DOCTYPE html><html>");
-//            writer.println("<head>");
-//            writer.println("<meta charset=\"UTF-8\" />");
-//            writer.println("<title>MyServlet.java:doGet(): Servlet code!</title>");
-//            writer.println("</head>");
-//            writer.println("<body>");
-//
-//            writer.println("<h1>This is a simple java servlet.</h1>");
-//
-//            writer.println("</body>");
-//            writer.println("</html>");
-//        }
-
 
     }
 }

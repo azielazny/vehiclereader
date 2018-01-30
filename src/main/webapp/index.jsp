@@ -4,44 +4,91 @@
 <html>
 <head>
     <title>Rejestracja pojazdu</title>
-<style>
-    #canvasID {
-        border: 1px solid black;width:500px; height: 500px
-    }
-</style>
+    <style>
+        #canvasID {
+            border: 1px solid black;
+            width: 500px;
+            height: 500px
+        }
+
+        #regbase tr td {
+            border: 1px solid #333;
+            padding: 5px;
+            background: #fefefe;
+        }
+
+        body {
+            margin: 0px;
+            overflow:hidden;
+        }
+        .column {
+            overflow:auto;
+        }
+        #fromFile, #base64, #camera {
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+
+        textarea {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+    </style>
 </head>
-<body >
+<body>
 
-<h2>Aktualny czas to <%= LocalDateTime.now() %>
-</h2>
-<div style="width: 50%; float:left; display: inline-block">
-    <p>Poniżej możesz zeskanować kod z dowodu:</p>
-    <div width="333px" height="333px">
-    <video id="videoID" autoplay style="border: 1px solid black;"></video>
-</div>
-<div>
-    <canvas id="canvasID" style="display: none"></canvas>
-</div>
-<div>
-        <input type="button" value="Take photo" onclick="captureTimer()"
-               style="width: 200px; height: 30px;"/>
-        <input type="button" value="Send" onclick="stopCaptureTimer()" style="width: 200px; height: 30px;"/>
-</div>
+<div class="column" style="width: 50%; float:left; display: inline-block">
+    <h2>Aktualny czas to <%= LocalDateTime.now() %>
+    </h2>
+    <div id="fromFile">
+        <p>Jeśli masz zdjęcie to dodaj je poniżej</p>
+        <form action="/webinterface" method="post" enctype="multipart/form-data" mediaType="multipart/form-data">
+            <input type="file" name="fileFromDisc" value=""/>
+            <input type="submit" value="załaduj" name="fromFile" style="width: 200px; height: 30px;"/>
+        </form>
+        Wybrałeś plik: ${uploadedFile}
+    </div>
+    <div id="base64">
+        <p>Jeśli masz zeskanowany kod to wklej go poniżej</p>
+        <form action="/webinterface" method="post" enctype="multipart/form-data" mediaType="multipart/form-data">
+            <textarea cols="40" rows="10" name="base64ToDecode">${uploadedText}</textarea>
+            <input type="submit" value="dekoduj" name="fromTextarea" style="width: 200px; height: 30px;"/>
+        </form>
+    </div>
+    <div id="camera">
+        <p>Poniżej możesz zeskanować kod z dowodu:</p>
+        <div width="333px" height="333px">
+            <video id="videoID" autoplay style="border: 1px solid black;"></video>
+        </div>
+        <div>
+            <canvas id="canvasID" style="display: none"></canvas>
+        </div>
+        <div>
+            <input type="button" value="Take photo" onclick="captureTimer()"
+                   style="width: 200px; height: 30px;"/>
+            <input type="button" value="Send" onclick="stopCaptureTimer()" style="width: 200px; height: 30px;"/>
+        </div>
+    </div>
 
-    <p>Jeśli masz zdjęcie to dodaj je poniżej</p>
-    <form action="/webinterface" method="post" enctype="multipart/form-data" mediaType="multipart/form-data">
-        <input type="file" name="fileFromDisc" value=""/>
-        <input type="submit" value="załaduj" name="fromFile" style="width: 200px; height: 30px;"/>
-    </form>
-    ${zaladowanyplik2}
-
-    <p>Jeśli masz zeskanowany kod to wklej go poniżej</p>
-    <textarea cols="40" rows="10"></textarea>
-    <button type="button" title="dekoduj" style="width: 200px; height: 30px;"></button>
 </div>
-<div style="width: 50%; float:right; height:100vh; background: #ddd;display: inline-block">
+<div class="column" style="width: 50%; float:right; height:100vh; background: #ddd;display: inline-block">
     WYNIK:
-    <div id="wynik">${wynik}</div>
+    <div id="wynik">
+        <table id="regbase" style="margin: 0 auto">
+            <script>
+                var registrationInfo = ${result},
+                    key;
+                var base;
+                for (key in registrationInfo) {
+                    if (registrationInfo.hasOwnProperty(key)) {
+                        base += "<tr><td>" + key + "</td><td>" + registrationInfo[key] + "</td></tr>";
+                    }
+                }
+                document.getElementById("regbase").innerHTML = base;
+            </script>
+        </table>
+    </div>
 </div>
 
 
@@ -64,13 +111,14 @@
     });
 
     var t;
+
     function captureTimer() {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         var imageData = canvas.toDataURL();
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "/webcamera", true);
         xmlhttp.send(imageData);
-        t=setTimeout("captureTimer()",2000);
+        t = setTimeout("captureTimer()", 2000);
     }
 
     function capture() {
