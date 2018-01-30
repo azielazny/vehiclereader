@@ -14,7 +14,7 @@ public class TextSenderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String result="";
-        if(req.getParameter("base64ToDecode") != null) {//textarea
+        if(req.getParameter("base64ToDecode") != null) {
             String decodedAztecText = req.getParameter("base64ToDecode");
             result = new ClientSimulation("klucz123").decodeText(decodedAztecText).toString();
         } else

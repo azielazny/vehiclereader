@@ -18,7 +18,7 @@ import java.util.Map;
 public class ImageBarcodeReader {
 
     private BufferedImage aztecFile;
-    private String charset = "UTF-8"; // or "ISO-8859-1"
+    private String charset = "UTF-8";
     private Map<EncodeHintType, ErrorCorrectionLevel> hintMap = (Map<EncodeHintType, ErrorCorrectionLevel>) new HashMap<>().put(EncodeHintType.AZTEC_LAYERS, ErrorCorrectionLevel.L);
 
     public static void main(String[] args) throws IOException, NotFoundException {
